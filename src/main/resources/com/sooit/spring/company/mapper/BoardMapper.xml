@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sooit.spring.company.mapper.BoardMapper">
+	<!-- dto 단수의 경로를 적어야됨 -->
+	<resultMap id="BoardPostResultMap" type="com.sooit.spring.company.dto.BoardPostDto">
+	<result property="postId" column="post_id"/>
+	<result property="content" column="content"/>
+	<result property="title" column="title"/>
+	<result property="author" column="author"/>
+	<result property="createdAt" column="created_at"/>
+	<result property="viewCount" column="view_count"/>
+	<result property="isDeleted" column="is_deleted"/>
+	
+	</resultMap>
+	<!-- 단순 매핑(데이터베이스 칼럼 이름과 dto 필드 이름이 일치)일 때 사용 -->
+<!-- 	<select id="getList" resultType="com.sooit.spring.company.dto.BoardPostDto"> -->
+	<!-- 복잡한 매핑(예: snake_case-> camelCase, 조인 결과 매핑 등)을 처리하기 위해 사용 -->
+	
+<!-- 	<select id="getList" resultMap="BoardPostResultMap"> -->
+<!-- 		SELECT * from company_board_posts limit #{limitIndex}, 5 -->
+<!-- 	</select> -->
+	<select id="getList" resultMap="BoardPostResultMap">
+		SELECT * from company_board_posts WHERE is_deleted = FALSE LIMIT #{limitIndex}, 5
+<!-- 		SELECT * from company_board_posts WHERE is_deleted IN (FALSE, TRUE) ORDER BY post_id DESC LIMIT #{limitIndex}, 5 -->
+	</select>
+	<select id="read" resultMap="BoardPostResultMap">
+<!-- 	<select id="read" resultType="com.sooit.spring.company.dto.BoardPostDto"> -->
+<!-- 	SELECT * from company_board_posts where post_id = #{post_id} -->
+<!-- 	SELECT * from company_board_posts where post_id = #{postId} -->
+	SELECT * FROM company_board_posts WHERE post_id = #{postId} AND is_deleted = FALSE
+	</select>
+	
+	<select id="gitCount" resultMap="BoardPostResultMap">
+	SELECT count(*) from company_board_posts 
+	</select>
+	
+<!-- 	<delete id="del" > -->
+<!-- 	DELETE from company_board_posts where post_id = #{post_id} -->
+<!-- 	DELETE from company_board_posts where post_id = #{postId} -->
+<!-- 	</delete> -->
+
+	<update id="del" >
+<!-- 	DELETE from company_board_posts where post_id = #{postId} -->
+	UPDATE company_board_posts SET is_deleted = TRUE WHERE post_id = #{postId}
+	</update>
+	
+	<update id="restore">
+	UPDATE company_board_posts SET is_deleted = FALSE WHERE post_id = #{postId}
+<!-- 	UPDATE company_board_posts SET is_deleted = FALSE WHERE post_id in (5) -->
+	</update>
+	
+	<insert id="write">
+	INSERT INTO company_board_posts (title,content,author) 
+    VALUES (#{title},#{content},#{author})
+	</insert>
+<!-- 	<update id="modify"> -->
+<!-- 	UPDATE company_board_posts  -->
+<!-- 	SET  -->
+<!-- 	title = #{title}, -->
+<!-- 	content = #{content}, -->
+<!-- 	author = #{author}  -->
+<!-- 	WHERE post_id = #{postId} -->
+<!-- 	</update> -->
+	<update id="modify">
+	UPDATE company_board_posts 
+	SET 
+	title = #{title},
+	content = #{content},
+	author = #{author}
+	WHERE post_id = #{postId}
+	</update>
+	<update id="increaseViewCount">
+	UPDATE company_board_posts
+	SET view_count = view_count + 1
+	WHERE post_id = #{postId}
+	</update>
+</mapper>
