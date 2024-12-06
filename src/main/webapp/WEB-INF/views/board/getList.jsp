@@ -16,6 +16,14 @@
 <body>
 	<h1>Company Board</h1>
 	<h2>게시글</h2>
+	<!-- 페이징 정보 출력 -->
+	총 글 수: ${blp.count }
+	총 페이지 수: ${blp.totalPage }
+	현재 블럭: ${blp.currentBlockNo }
+	블럭의 시작 페이지 번호: ${blp.blockStartNo }
+	블럭의 끝 페이지 번호: ${blp.blockEndNo }
+	이전 블럭 가능 여부: ${blp.hasPrev }
+	다음 블럭 가능 여부: ${blp.hasNext }
 	<table>
 		<tr>
 			<td>No</td>

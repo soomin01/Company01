@@ -11,4 +11,5 @@ public interface BoardService {
 	public void modify(BoardPostDto dto);
 //	public void increaseViewCount(long postId);
 	public void restore(long postId);
+	//git 테스트
 }
