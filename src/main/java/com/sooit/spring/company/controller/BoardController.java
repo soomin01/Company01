@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sooit.spring.company.dto.BoardPostDto;
+import com.sooit.spring.company.service.BoardListProcessor;
 import com.sooit.spring.company.service.BoardService;
 
 import lombok.AllArgsConstructor;
@@ -32,9 +33,13 @@ public class BoardController {
 //	}
 	
 	@GetMapping("/getList")
-	public void getList(@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, Model model) {
-		model.addAttribute("list",service.getList(currentPage));
+	public String getList(@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, Model model) {
+		// blp는 게시글 목록, 페이징 정보 등을 포함하는 객체
+	    BoardListProcessor blp = service.getList(currentPage);  // 게시글 목록을 가져오는 서비스 메소드 호출
+	    model.addAttribute("blp", blp);  // 'blp'를 Model에 추가하여 JSP에서 사용할 수 있도록 설정
+	    return "board/getList";  // board/getList.jsp 페이지로 이동
 	}
+	
 
 	//	@GetMapping("/read")
 //	public void read(@RequestParam("postId") Long postId, Model model) {

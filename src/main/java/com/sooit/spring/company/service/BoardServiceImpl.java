@@ -29,6 +29,7 @@ public class BoardServiceImpl implements BoardService {
 		return new BoardListProcessor(mapper, currentPage);
 	}
 	
+	
 	@Override
 	public BoardPostDto read(long postId) {
 		mapper.increaseViewCount(postId); //조회수 증가

@@ -32,8 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	SELECT * FROM company_board_posts WHERE post_id = #{postId} AND is_deleted = FALSE
 	</select>
 	
-	<select id="gitCount" resultMap="BoardPostResultMap">
-	SELECT count(*) from company_board_posts 
+	<select id="getCount" resultType="int">
+	SELECT count(*) from company_board_posts
 	</select>
 	
 <!-- 	<delete id="del" > -->

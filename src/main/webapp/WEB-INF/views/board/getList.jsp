@@ -17,13 +17,14 @@
 	<h1>Company Board</h1>
 	<h2>게시글</h2>
 	<!-- 페이징 정보 출력 -->
-	총 글 수: ${blp.count }
-	총 페이지 수: ${blp.totalPage }
-	현재 블럭: ${blp.currentBlockNo }
-	블럭의 시작 페이지 번호: ${blp.blockStartNo }
-	블럭의 끝 페이지 번호: ${blp.blockEndNo }
-	이전 블럭 가능 여부: ${blp.hasPrev }
-	다음 블럭 가능 여부: ${blp.hasNext }
+	총 글 수: ${blp.count } <br>,
+	총 페이지 수: ${blp.totalPage } <br>,
+	현재 블럭: ${blp.currentBlockNo } <br>,
+	블럭의 시작 페이지 번호: ${blp.blockStartNo } <br>,
+	블럭의 끝 페이지 번호: ${blp.blockEndNo } <br>,
+	이전 블럭 가능 여부: ${blp.hasPrev } <br>,
+	다음 블럭 가능 여부: ${blp.hasNext } <hr>
+	
 	<table>
 		<tr>
 			<td>No</td>
@@ -33,34 +34,36 @@
 			<td>조회</td>
 
 		</tr>
-		<%
-		Object o = request.getAttribute("list");
-		@SuppressWarnings("unchecked")
-		ArrayList<BoardPostDto> list = (ArrayList<BoardPostDto>) o;
-
-		for (BoardPostDto post : list) {
-			//     Long postId = list.get(i).getPost_id(); 
-			Long postId = post.getPostId();
-			String title = post.getTitle();
-			String content = post.getContent();
-			String author = post.getAuthor();
-			LocalDateTime createdAt = post.getCreatedAt();
-			Long viewCount = post.getViewCount();
-		%>
+		
+		<!-- 데이터가 없을 경우 메시지 출력 -->
+		<c:if test="${empty blp.posts }">
+		<tr><td colspan="5">등록된 글이 없습니다.</td></tr>
+		</c:if>
+		
+		<!-- 게시글 목록 출력 -->
+		<c:forEach var="post" items="${blp.posts }">
 		<tr>
-			<td><%=postId%></td>
-			<td><a href="${cp }/board/read?postId=<%=postId%>"> <%=title%>
-			</a></td>
-			<td><%=author%></td>
-			<td><%=createdAt %>
-			<td><%=viewCount %>
+		<td>${post.postId }</td>
+		<td><a href="${cp }/board/read?postId=${post.postId}">${post.title }</a></td>
+		<td>${post.author }</td>
+		<td>${post.createdAt }</td>
+		<td>${post.viewCount }</td>
 		</tr>
-		<%
-		}
-		%>
+		</c:forEach>
 	</table>
 	<br>
-	<br>
+	<!-- 이전 블록 링크 -->
+	<c:if test="${blp.hasPrev }">
+	<a href="${cp }/board/getList?currentPage=${blp.prevPage}">이전</a>
+	</c:if>
+	<!-- 페이지 링크 -->
+	<c:forEach var="i" begin="${blp.blockStartNo }" end="${blp.blockEndNo }">
+	[<a href="${cp }/board/getList?currentPage=${i }">${i }</a>]
+	</c:forEach>
+	<!-- 다음 블록 링크 -->
+	<c:if test="${blp.hasNext }">
+	<a href="${cp }/board/getList?currentPage=${blp.nextPage}">다음</a>
+	</c:if>
 	<!-- [] 글쓰기 페이지로 이동 -->
 	<a href="${cp }/board/write">새글 쓰기</a>
 	<a href="${cp }/board/restore?postId=5">글 복구</a>

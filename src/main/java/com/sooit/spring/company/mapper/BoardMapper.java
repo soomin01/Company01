@@ -7,6 +7,7 @@ import com.sooit.spring.company.dto.BoardPostDto;
 
 public interface BoardMapper {
 	public int getCount();
+//	public Integer getCount();
 	public ArrayList<BoardPostDto> getList(int limitIndex);
 	public BoardPostDto read(long postId);
 	public void del(long postId);
