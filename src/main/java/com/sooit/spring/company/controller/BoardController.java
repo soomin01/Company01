@@ -1,5 +1,7 @@
 package com.sooit.spring.company.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +34,29 @@ public class BoardController {
 //		model.addAttribute("list",service.getList(currentPage));
 //	}
 	
+//	@GetMapping("/getList")
+//	public String getList(@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, Model model) {
+//		// blp는 게시글 목록, 페이징 정보 등을 포함하는 객체
+//	    BoardListProcessor blp = service.getList(currentPage);  // 게시글 목록을 가져오는 서비스 메소드 호출
+//	    model.addAttribute("blp", blp);  // 'blp'를 Model에 추가하여 JSP에서 사용할 수 있도록 설정
+//	    return "board/getList";  // board/getList.jsp 페이지로 이동
+//	}
+	
 	@GetMapping("/getList")
-	public String getList(@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, Model model) {
+	public String getList(@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, 
+			@RequestParam(value = "word", required = false, defaultValue = "") String word, 
+			HttpServletRequest request, Model model) {
+		
+		log.info("컨트롤러 ==== 현재 페이지: " + currentPage + ", 검색어: " + word);
+		
+		String contextPath = request.getContextPath(); //contextPath 가져오기
+		
 		// blp는 게시글 목록, 페이징 정보 등을 포함하는 객체
-	    BoardListProcessor blp = service.getList(currentPage);  // 게시글 목록을 가져오는 서비스 메소드 호출
-	    model.addAttribute("blp", blp);  // 'blp'를 Model에 추가하여 JSP에서 사용할 수 있도록 설정
-	    return "board/getList";  // board/getList.jsp 페이지로 이동
+		BoardListProcessor blp = service.getList(currentPage, word, contextPath);  // 게시글 목록을 가져오는 서비스 메소드 호출
+		model.addAttribute("blp", blp);  // 'blp'를 Model에 추가하여 JSP에서 사용할 수 있도록 설정
+		return "board/getList";  // board/getList.jsp 페이지로 이동
 	}
 	
-
 	//	@GetMapping("/read")
 //	public void read(@RequestParam("postId") Long postId, Model model) {
 //		log.info("컨트롤러 ==== 글번호 ============"+postId);
@@ -49,12 +65,20 @@ public class BoardController {
 
 	@GetMapping("/read")
 	public String read(@RequestParam("postId") Long postId, Model model) {
+		log.info("컨트롤러=====글 번호 조회:" + postId);
 		BoardPostDto post = service.read(postId); //조회수 증가 후 데이터를 가져옴
 		model.addAttribute("read",post);
 		return "board/read";
 	}
 	
-	@GetMapping("/del")
+	//게시글 삭제
+//	@GetMapping("/del")
+//	public String del(@RequestParam("postId") Long postId) {
+//		log.info("컨트롤러 ==== 글번호 ============"+postId);
+//		service.del(postId);
+//		return "redirect:/board/getList";  //sendRedirect 로 이동하게 됨.
+//	}
+	@PostMapping("/del")
 	public String del(@RequestParam("postId") Long postId) {
 		log.info("컨트롤러 ==== 글번호 ============"+postId);
 		service.del(postId);
@@ -91,7 +115,13 @@ public class BoardController {
 	}
 	
 	//삭제된 데이터 복구
-	@GetMapping("/restore")
+//	@GetMapping("/restore")
+//	public String restore(@RequestParam("postId") Long postId) {
+//		log.info("컨트롤러 ==== 복구 글 번호 ==========" + postId);
+//		service.restore(postId);
+//		return "redirect:/board/getList";
+//	}
+	@PostMapping("/restore")
 	public String restore(@RequestParam("postId") Long postId) {
 		log.info("컨트롤러 ==== 복구 글 번호 ==========" + postId);
 		service.restore(postId);

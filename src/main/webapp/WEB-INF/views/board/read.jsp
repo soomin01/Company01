@@ -37,7 +37,5 @@ Long viewCount = read.getViewCount();
 <a href="${cp }/board/modify?postId=<%=postId %>">글 수정</a>
 <!-- [ ] 글 리스트로 이동. -->	
 <a href="${cp }/board/getList?currentPage=1">글 리스트</a>
-<!-- [ ] 삭제된 글 복구로 이동. -->	
-<%-- <a href="${cp }/board/restore?postId=<%=postId %>">글 복구</a> --%>
 </body>
 </html>

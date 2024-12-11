@@ -2,8 +2,6 @@ package com.sooit.spring.company.service;
 
 import java.util.ArrayList;
 
-
-
 import com.sooit.spring.company.dto.BoardPostDto;
 import com.sooit.spring.company.mapper.BoardMapper;
 
@@ -16,6 +14,10 @@ public class BoardListProcessor {
 	public int totalPage = 0; //전체 페이지 수
 	public int currentPage = 0; //현재 페이지 번호
 	
+	private String htmlPageList;
+	private String word;
+	private String cp; //contextPath
+	
 	int totalBlock = 0; //블록 총 갯수
 	int currentBlockNo = 0; //현재 블록 번호
 	int blockStartNo = 0; //블록 시작 페이지 번호
@@ -26,10 +28,12 @@ public class BoardListProcessor {
 	boolean hasNext = true; //다음 블록 이동 가능 여부
 	private int count; //전체 게시글 수 추가
 	
-	public BoardListProcessor(BoardMapper mapper, int currentPage) {
+	public BoardListProcessor(BoardMapper mapper, int currentPage, String word, String cp) {
 		super();
 		this.mapper = mapper;
 		this.currentPage = currentPage;
+		this.word =word;
+		this.cp = cp;
 		this.totalPage = getPageCount();
 		getList(); //현재 페이지 번호와 전체 페이지 수를 기반으로 리스트 데이터 열기
 		
@@ -55,18 +59,49 @@ public class BoardListProcessor {
 			hasNext = false;
 		}
 		
+		this.htmlPageList = getHtmlPageList();
 		this.count = mapper.getCount(); //게시글의 총 수를 가져옵니다.
 		
 	}
 	
+	/*페이징 블록 처리*/
+//	public void getList() {
+//		int startIndex = (currentPage - 1) * Board.LIST_AMOUNT;
+//		posts = mapper.getList(startIndex);
+//	}
+	/*페이징 블록, 검색기능*/
 	public void getList() {
 		int startIndex = (currentPage - 1) * Board.LIST_AMOUNT;
-		posts = mapper.getList(startIndex);
+		if(word.equals("")) {
+			posts = mapper.getList(startIndex);
+		} else {
+			posts = mapper.getListSearch(startIndex,word);
+			
+		}
 	}
+	
+	/* 총 페이지 수 구하기 */
+//	public int getPageCount() {
+//		int totalPageCount = 0;
+//		int count = mapper.getCount();
+//		if(count % Board.LIST_AMOUNT == 0) {
+//			totalPageCount = count / Board.LIST_AMOUNT;
+//		} else {
+//			totalPageCount = count / Board.LIST_AMOUNT + 1;
+//		}
+//		return totalPageCount;
+//		
+//	}
+	
 	/* 총 페이지 수 구하기 */
 	public int getPageCount() {
 		int totalPageCount = 0;
-		int count = mapper.getCount();
+		int count = 0;
+		if(word.equals("")) {
+			count = mapper.getCount();
+		} else {
+			count = mapper.getCountSearch(word);
+		}
 		if(count % Board.LIST_AMOUNT == 0) {
 			totalPageCount = count / Board.LIST_AMOUNT;
 		} else {
@@ -85,15 +120,21 @@ public class BoardListProcessor {
 		String html = "";
 		
 		if(hasPrev) {
-			html = html + String.format("<a href='%s/board/getlist?currentPage=%d'>이전</a>",prevPage);
+			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>이전</a>",cp,prevPage,word);
 		}
 		
+//		for(int i = blockStartNo; i<= blockEndNo; i++) {
+//			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>%d</a>&nbsp;&nbsp;",cp,i,word,i);
+//		}
+		
+		//코드 수정
 		for(int i = blockStartNo; i<= blockEndNo; i++) {
-			html = html + String.format("<a href='%s/board/getList?currentPage=%d</a>&nbsp;&nbsp;",i,i);
+			
+			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>%d</a>&nbsp;&nbsp;",cp,i,word,i);
 		}
 		
 		if(hasNext) {
-			html = html + String.format("<a href='%s/board/getList?currentPage=%d'>다음</a>",nextPage);
+			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>다음</a>",cp,nextPage,word);
 			
 		}
 		

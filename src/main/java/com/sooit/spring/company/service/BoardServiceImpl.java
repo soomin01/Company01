@@ -1,5 +1,7 @@
 package com.sooit.spring.company.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +26,15 @@ public class BoardServiceImpl implements BoardService {
 //		return mapper.getList(limitIndex);
 //	}
 	
-	@Override
-	public BoardListProcessor getList(int currentPage) {
-		return new BoardListProcessor(mapper, currentPage);
-	}
+//	@Override
+//	public BoardListProcessor getList(int currentPage) {
+//		return new BoardListProcessor(mapper, currentPage);
+//	}
 	
+	@Override
+	public BoardListProcessor getList(int currentPage, String word, String cp) {
+		return new BoardListProcessor(mapper, currentPage, word, cp);
+	}
 	
 	@Override
 	public BoardPostDto read(long postId) {
@@ -52,7 +58,12 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public void restore(long postId) {
-		mapper.restore(postId);
+		mapper.restore(postId); //단일 복구
+	}
+	
+	@Override
+	public void restore(List<Long> postIds) {
+		mapper.restore(postIds); //Mapper에 다중 복구 처리하는 SQL 연결
 	}
 	
 }
