@@ -1,5 +1,7 @@
 package com.sooit.spring.company.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -43,16 +45,24 @@ public class BoardController {
 //	}
 	
 	@GetMapping("/getList")
-	public String getList(@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, 
+	public String getList(
+			@RequestParam(value = "currentPage",required = false, defaultValue = "1") int currentPage, 
 			@RequestParam(value = "word", required = false, defaultValue = "") String word, 
+			@RequestParam(value = "type", required = false, defaultValue = "") String type,
 			HttpServletRequest request, Model model) {
 		
-		log.info("컨트롤러 ==== 현재 페이지: " + currentPage + ", 검색어: " + word);
+		log.info("컨트롤러 ==== 현재 페이지: " + currentPage + ", 검색어: " + word + ", 검색 유형: '" + type + "'");
+		
+		//type 값 검증 및 기본값 설정
+		if(!List.of("title", "content", "author").contains(type)) {
+			type = ""; //기본값 설정
+			log.info("잘못된 type 값: 기본값으로 초기화됨");
+		}
 		
 		String contextPath = request.getContextPath(); //contextPath 가져오기
 		
 		// blp는 게시글 목록, 페이징 정보 등을 포함하는 객체
-		BoardListProcessor blp = service.getList(currentPage, word, contextPath);  // 게시글 목록을 가져오는 서비스 메소드 호출
+		BoardListProcessor blp = service.getList(currentPage, word, contextPath, type);  // 게시글 목록을 가져오는 서비스 메소드 호출
 		model.addAttribute("blp", blp);  // 'blp'를 Model에 추가하여 JSP에서 사용할 수 있도록 설정
 		return "board/getList";  // board/getList.jsp 페이지로 이동
 	}

@@ -70,9 +70,20 @@
 	<!-- [] 글쓰기 페이지로 이동 -->
 	<a href="${cp }/board/write">새글 쓰기</a>
 
-	<form action="${cp }/board/getList">
-		<input name="word" placeholder="검색어 입력"> 
-		<input type="submit" value="검색">
+<%-- 	<form action="${cp }/board/getList"> --%>
+<!-- 		<input name="word" placeholder="검색어 입력">  -->
+<!-- 		<input type="submit" value="검색"> -->
+<!-- 	</form> -->
+	<form action="${cp }/board/getList" method="get" id="searchFoam" name="search-form">
+		<select name="type" class="type-box">
+		<option value="">카테고리</option>
+		<option value="title">제목</option>
+		<option value="content">글 내용</option>
+		<option value="author">작성자ID</option>
+		</select>
+		<input class="inputId" type="text" name="word" placeholder="검색어 입력">
+
+		<input class="submitBtn" type="submit" value="검색">
 	</form>
 
 

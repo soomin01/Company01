@@ -17,6 +17,7 @@ public class BoardListProcessor {
 	private String htmlPageList;
 	private String word;
 	private String cp; //contextPath
+	private String type;
 	
 	int totalBlock = 0; //블록 총 갯수
 	int currentBlockNo = 0; //현재 블록 번호
@@ -28,12 +29,13 @@ public class BoardListProcessor {
 	boolean hasNext = true; //다음 블록 이동 가능 여부
 	private int count; //전체 게시글 수 추가
 	
-	public BoardListProcessor(BoardMapper mapper, int currentPage, String word, String cp) {
+	public BoardListProcessor(BoardMapper mapper, int currentPage, String word, String cp, String type) {
 		super();
 		this.mapper = mapper;
 		this.currentPage = currentPage;
-		this.word =word;
+		this.word = word;
 		this.cp = cp;
+		this.type = type;
 		this.totalPage = getPageCount();
 		getList(); //현재 페이지 번호와 전체 페이지 수를 기반으로 리스트 데이터 열기
 		
@@ -75,7 +77,7 @@ public class BoardListProcessor {
 		if(word.equals("")) {
 			posts = mapper.getList(startIndex);
 		} else {
-			posts = mapper.getListSearch(startIndex,word);
+			posts = mapper.getListSearch(startIndex,word,type);
 			
 		}
 	}
@@ -100,7 +102,7 @@ public class BoardListProcessor {
 		if(word.equals("")) {
 			count = mapper.getCount();
 		} else {
-			count = mapper.getCountSearch(word);
+			count = mapper.getCountSearch(word,type);
 		}
 		if(count % Board.LIST_AMOUNT == 0) {
 			totalPageCount = count / Board.LIST_AMOUNT;
@@ -117,24 +119,21 @@ public class BoardListProcessor {
 	}
 	
 	public String getHtmlPageList() {
+		
 		String html = "";
 		
 		if(hasPrev) {
-			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>이전</a>",cp,prevPage,word);
+			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s&type=%s'>이전</a>",cp,prevPage,word,type);
 		}
-		
-//		for(int i = blockStartNo; i<= blockEndNo; i++) {
-//			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>%d</a>&nbsp;&nbsp;",cp,i,word,i);
-//		}
 		
 		//코드 수정
 		for(int i = blockStartNo; i<= blockEndNo; i++) {
 			
-			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>%d</a>&nbsp;&nbsp;",cp,i,word,i);
+			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s&type=%s'>%d</a>&nbsp;&nbsp;",cp,i,word,type,i);
 		}
 		
 		if(hasNext) {
-			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s'>다음</a>",cp,nextPage,word);
+			html = html + String.format("<a href='%s/board/getList?currentPage=%d&word=%s&type=%s'>다음</a>",cp,nextPage,word,type);
 			
 		}
 		

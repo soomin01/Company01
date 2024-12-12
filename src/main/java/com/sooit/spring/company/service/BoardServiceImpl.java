@@ -32,8 +32,8 @@ public class BoardServiceImpl implements BoardService {
 //	}
 	
 	@Override
-	public BoardListProcessor getList(int currentPage, String word, String cp) {
-		return new BoardListProcessor(mapper, currentPage, word, cp);
+	public BoardListProcessor getList(int currentPage, String word, String cp, String type) {
+		return new BoardListProcessor(mapper, currentPage, word, cp, type);
 	}
 	
 	@Override

@@ -9,9 +9,10 @@ import com.sooit.spring.company.dto.BoardPostDto;
 
 public interface BoardMapper {
 	public int getCount();
-	public int getCountSearch(String word);
+//	public int getCountSearch(String word);
+	public int getCountSearch(@Param("word") String word, @Param("type") String type);
 	public ArrayList<BoardPostDto> getList(int limitIndex);
-	public ArrayList<BoardPostDto> getListSearch(@Param("limitIndex") int limitIndex, @Param("word") String word);
+	public ArrayList<BoardPostDto> getListSearch(@Param("limitIndex") int limitIndex, @Param("word") String word, @Param("type") String type);
 	public BoardPostDto read(long postId);
 	public void del(long postId);
 	public void write(BoardPostDto dto);

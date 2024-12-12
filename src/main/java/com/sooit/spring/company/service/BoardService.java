@@ -7,7 +7,7 @@ import com.sooit.spring.company.dto.BoardPostDto;
 public interface BoardService {
 //	public ArrayList<BoardPostDto> getList(int currentPage);
 //	public BoardListProcessor getList(int currentPage);
-	public BoardListProcessor getList(int currentPage, String word, String cp);
+	public BoardListProcessor getList(int currentPage, String word, String cp, String type);
 	public BoardPostDto read(long postId);
 	public void del(long postId);
 	public void write(BoardPostDto dto);

@@ -36,20 +36,78 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		is_deleted = FALSE
 	</select>
 
+	<!-- 게시물 개수 조회 -->
 	<select id="getCount" resultType="int">
 		SELECT count(*) from
 		company_board_posts
 	</select>
 
+	<!-- 검색어로 게시물 개수 조회 -->
+	<!-- <select id="getCountSearch" resultType="int"> -->
+	<!-- SELECT count(*) from company_board_posts WHERE title like -->
+	<!-- CONCAT('%',#{word},'%') -->
+	<!-- </select> -->
 	<select id="getCountSearch" resultType="int">
-		SELECT count(*) from company_board_posts WHERE title like
-		CONCAT('%',#{word},'%')
+		<!-- SELECT count(*) from -->
+		<!-- company_board_posts WHERE ${type} like -->
+		<!-- CONCAT('%',#{word},'%') AND -->
+		<!-- is_deleted = FALSE -->
+		
+		SELECT count(*) FROM company_board_posts WHERE
+		<choose>
+		<when test="type == 'title'">
+			title LIKE CONCAT('%', #{word}, '%')
+		</when>
+		<when test="type == 'content'">
+			content LIKE CONCAT('%', #{word}, '%')
+		</when>
+		<when test="type == 'author'">
+			author LIKE CONCAT('%', #{word}, '%')
+		</when>
+		<otherwise>
+			1 = 1 <!-- 기본값 (없으면 모든 레코드를 반환) -->
+		</otherwise>
+		</choose>
+		AND is_deleted = FALSE
 	</select>
 
+	<!-- 검색어로 게시물 조회 -->
+	<!-- <select id="getListSearch" -->
+	<!-- resultType="com.sooit.spring.company.dto.BoardPostDto"> -->
+	<!-- SELECT * from company_board_posts WHERE title like CONCAT('%',#{word},'%') -->
+	<!-- LIMIT #{limitIndex}, 5 -->
+	<!-- </select> -->
+
+	<!-- type으로 검색어 게시물 조회 -->
 	<select id="getListSearch"
 		resultType="com.sooit.spring.company.dto.BoardPostDto">
-		SELECT * from company_board_posts WHERE title like CONCAT('%',#{word},'%')
-		LIMIT #{limitIndex}, 5
+		<!-- SELECT * -->
+		<!-- FROM company_board_posts -->
+		<!-- WHERE ${type} LIKE CONCAT('%', #{word}, '%') -->
+		<!-- AND is_deleted = FALSE -->
+		<!-- ORDER BY post_id DESC -->
+		<!-- LIMIT #{limitIndex}, 5 -->
+
+		SELECT *
+		FROM company_board_posts
+		WHERE is_deleted = FALSE
+		<if test="word != null and word != ''">
+			<choose>
+				<when test="type == 'title'">
+					AND title LIKE CONCAT('%', #{word}, '%')
+				</when>
+				<when test="type == 'content'">
+					AND content LIKE CONCAT('%', #{word}, '%')
+				</when>
+				<when test="type == 'author'">
+					AND author LIKE CONCAT('%', #{word}, '%')
+				</when>
+				<otherwise>
+					AND(title LIKE CONCAT('%', #{word}, '%') OR content LIKE
+					CONCAT('%', #{word}, '%'))
+				</otherwise>
+			</choose>
+		</if>
 	</select>
 
 	<!-- <delete id="del" > -->
