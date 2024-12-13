@@ -53,22 +53,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<!-- CONCAT('%',#{word},'%') AND -->
 		<!-- is_deleted = FALSE -->
 		
-		SELECT count(*) FROM company_board_posts WHERE
+		SELECT count(*) FROM company_board_posts 
+		WHERE is_deleted = FALSE
 		<choose>
 		<when test="type == 'title'">
-			title LIKE CONCAT('%', #{word}, '%')
+			AND title LIKE CONCAT('%', #{word}, '%')
 		</when>
 		<when test="type == 'content'">
-			content LIKE CONCAT('%', #{word}, '%')
+			AND content LIKE CONCAT('%', #{word}, '%')
 		</when>
 		<when test="type == 'author'">
-			author LIKE CONCAT('%', #{word}, '%')
+			AND author LIKE CONCAT('%', #{word}, '%')
+		</when>
+		<when test="type == 'total'">
+		AND (title LIKE CONCAT('%', #{word}, '%')
+		OR content LIKE CONCAT('%', #{word}, '%')
+		OR author LIKE CONCAT('%', #{word}, '%'))
 		</when>
 		<otherwise>
-			1 = 1 <!-- 기본값 (없으면 모든 레코드를 반환) -->
+			 <!-- 기본값: 조건 없음 -->
 		</otherwise>
 		</choose>
-		AND is_deleted = FALSE
 	</select>
 
 	<!-- 검색어로 게시물 조회 -->
@@ -102,12 +107,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<when test="type == 'author'">
 					AND author LIKE CONCAT('%', #{word}, '%')
 				</when>
+				<when test="type == 'total'">
+				AND (title LIKE CONCAT('%', #{word}, '%')
+				OR content LIKE CONCAT('%', #{word}, '%')
+				OR author LIKE CONCAT('%', #{word}, '%'))
+				</when>
 				<otherwise>
-					AND(title LIKE CONCAT('%', #{word}, '%') OR content LIKE
-					CONCAT('%', #{word}, '%'))
+<!-- 					기본값: 조건 없음 -->
 				</otherwise>
 			</choose>
 		</if>
+
+		ORDER BY post_id DESC LIMIT #{limitIndex}, 5
 	</select>
 
 	<!-- <delete id="del" > -->

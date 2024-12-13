@@ -54,7 +54,7 @@ public class BoardController {
 		log.info("컨트롤러 ==== 현재 페이지: " + currentPage + ", 검색어: " + word + ", 검색 유형: '" + type + "'");
 		
 		//type 값 검증 및 기본값 설정
-		if(!List.of("title", "content", "author").contains(type)) {
+		if(!List.of("title", "content", "author", "total").contains(type)) {
 			type = ""; //기본값 설정
 			log.info("잘못된 type 값: 기본값으로 초기화됨");
 		}
