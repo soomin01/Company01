@@ -11,7 +11,7 @@
 <body>
 
 <h2>Login</h2>
-<form action="${cp }/login" method="post">
+<form action="${cp }/user/login" method="post">
 <label for="email">Email:</label><br>
 <input type="email" id="email" name="email" required><br><br>
 
@@ -20,6 +20,6 @@
 
 <input type="submit" value="Login">
 </form>
-<p>Don't have an account? <a href="${cp }/signup">Sign up</a></p>
+<p>Don't have an account? <a href="${cp }/user/signup">Sign up</a></p>
 </body>
 </html>

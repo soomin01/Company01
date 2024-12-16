@@ -24,6 +24,6 @@
 <a href="${cp }/board/modify?postId=1">수정</a>
 <a href="${cp }/board/getList?currentPage=1">[방명록]</a>
 <h2>Welcome, ${user.name}!</h2>
-    <a href="/user/login">Logout</a>
+    <a href="${cp }/user/login">Logout</a>
 </body>
 </html>
