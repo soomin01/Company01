@@ -43,8 +43,9 @@
 				</tr>
 			</c:if>
 
-			<!-- 게시글 목록 출력 -->
+			<!-- 게시글 목록 출력 (postId가 비어있지 않은 경우만 출력) -->
 			<c:forEach var="post" items="${blp.posts }">
+<%-- 			<c:if test="${not empty post.postId }"> --%>
 				<tr>
 					<td>${post.postId }</td>
 					<td><a href="${cp }/board/read?postId=${post.postId}">${post.title }</a></td>
@@ -56,6 +57,7 @@
 						<input type="checkbox" name="postIds" value="${post.postId }">
 					</td>
 				</tr>
+<%-- 			</c:if> --%>
 			</c:forEach>
 		</table>
 		<br>

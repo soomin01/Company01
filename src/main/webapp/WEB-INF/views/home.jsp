@@ -22,7 +22,7 @@
 <a href="${cp }/board/del?postId=2">삭제</a>
 <a href="${cp }/board/write">글쓰기</a>
 <a href="${cp }/board/modify?postId=1">수정</a>
-<a href="${cp }/board/getList?currentPage=1">[방명록]</a>
+<a href="${cp }/board/getList?currentPage=1">[Company 게시판]</a>
 <h2>Welcome, ${user.name}!</h2>
     <a href="${cp }/user/login">Logout</a>
 </body>

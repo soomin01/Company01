@@ -41,6 +41,7 @@ public class BoardServiceImpl implements BoardService {
 		mapper.increaseViewCount(postId); //조회수 증가
 		return mapper.read(postId);
 	}
+	
 	@Override
 	public void del(long postId) {
 		mapper.del(postId);

@@ -2,6 +2,7 @@ package com.sooit.spring.company.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
 	private CommentMapper commentMapper;
 	
 	@Override
-	public List<CommentDto> getCommentsByPostId(int postId){
+	public List<CommentDto> getCommentsByPostId(long postId){
 		return commentMapper.getCommentsByPostId(postId);
 	}
 	

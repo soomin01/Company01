@@ -15,17 +15,18 @@ public class UserDto {
 //	private LocalDate birthdate; //생년월일
 //	private String birthdate; //생년월일
 	private String gender; //성별 (M: 남성, F: 여성, Other: 기타)
+	
 	 @DateTimeFormat(pattern = "yyyy-MM-dd")
 	    private LocalDate birthdate;
 
 	    // Getter와 Setter
-	    public LocalDate getBirthdate() {
-	        return birthdate;
-	    }
-
-	    public void setBirthdate(LocalDate birthdate) {
-	        this.birthdate = birthdate;
-	    }
+//	    public LocalDate getBirthdate() {
+//	        return birthdate;
+//	    }
+//
+//	    public void setBirthdate(LocalDate birthdate) {
+//	        this.birthdate = birthdate;
+//	    }
 //	//Validation 로직 추가
 //	public boolean isPasswordMatching() {
 //		return password.equals(confirmPassword);

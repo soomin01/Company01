@@ -63,6 +63,18 @@ Company_v0.1.6
 Company_v0.1.7(댓글 수정중)
 -----------------------------------------------------------
 -기존 게시글에 댓글 시스템 넣기
+-검색후 postId값 null인 상태를 해결 BoardMapper.xml에 getListSearch를
+ resultType말고 resultMap으로 변경 하여 문제 해결
+-댓글 링크가 postId값이 null이어서 이동이 안됨 이유 jsp문법하고 el문법을 같이 써서
+ 문제 발생 jsp문법으로 통일
+-댓글이 MySQL에는 값이 들어가는데 브라우저에서 안되는 이유 
+ MySQL에는 post_id이고 java에서는 postId로 표기가 달라서 mybatis에 
+ commentResultMap을 추가하여 문제 해결
+-댓글 삭제 안되는 이유 rediect링크가 잘못된 올바른 경로로 재설정
+-게시글 삭제 안되는 문제 발생 이유는 PostMapping인데 GetMapping을 요구해서
+ read.jsp에 method를 post로 변경
+ SELECT문 일때만 GetMapping 쓸것
+-게시글 복구 수정중!!
 ============================================================
 -지금 git 테스트중-
 

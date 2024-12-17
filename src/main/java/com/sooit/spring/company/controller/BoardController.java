@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.sooit.spring.company.dto.BoardPostDto;
+import com.sooit.spring.company.dto.CommentDto;
 import com.sooit.spring.company.service.BoardListProcessor;
 import com.sooit.spring.company.service.BoardService;
+import com.sooit.spring.company.service.CommentService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -29,6 +31,7 @@ public class BoardController {
 //		this.service = service;
 //	}
 	private BoardService service;
+	private CommentService commentService; //CommentService 필드 추가
 
 
 //	@GetMapping("/getList")
@@ -75,8 +78,18 @@ public class BoardController {
 
 	@GetMapping("/read")
 	public String read(@RequestParam("postId") Long postId, Model model) {
+		if(postId == null) {
+			log.error("postId가 비었습니다.");
+			return "redirect:/board/getList"; //목록 페이지로 리다이렉트
+		}
 		log.info("컨트롤러=====글 번호 조회:" + postId);
 		BoardPostDto post = service.read(postId); //조회수 증가 후 데이터를 가져옴
+		
+		if(post == null) {
+			//게시글이 없는 경우에 대한 처리(예: 오류 메시지)
+			log.error("게시글이 존재하지 않습니다. postId: " + postId);
+			return "redirect:/board/getList"; //게시글이 없다면 게시글 목록으로 리다이렉트
+		}
 		model.addAttribute("read",post);
 		return "board/read";
 	}
@@ -136,6 +149,21 @@ public class BoardController {
 		log.info("컨트롤러 ==== 복구 글 번호 ==========" + postId);
 		service.restore(postId);
 		return "redirect:/board/getList";
+	}
+	
+	//postDetail 메소드를 추가 하여 댓글을 확인 
+	@GetMapping("/postDetail")
+	public String postDetail(@RequestParam("postId") long postId, Model model) {
+		//게시글 정보 가져오기
+		BoardPostDto post = service.read(postId);
+		//댓글 목록 가져오기
+		List<CommentDto> comments = commentService.getCommentsByPostId(postId);
+		
+		//모델에 게시글과 댓글 정보 추가
+		model.addAttribute("post", post);
+		model.addAttribute("comments", comments);
+		
+		return "board/postDetail"; //postDetail.jsp로 이동
 	}
 	
 }

@@ -31,8 +31,14 @@ Long viewCount = read.getViewCount();
 작성시간:<%=createdAt %>
 조회수:<%=viewCount %>
 <br><br>
+<!-- 댓글 작성 및 확인을 위해 postDetail.jsp로 이동 -->
+<a href="${cp }/board/postDetail?postId=<%=postId %>">댓글 보기 및 작성</a>
 <!-- [ ] 글삭제로 이동. 글번호를 넘겨야함. -->	
-<a href="${cp }/board/del?postId=<%=postId %>">글 삭제</a>
+<%-- <a href="${cp }/board/del?postId=<%=postId %>">글 삭제</a> --%>
+<form action="${cp }/board/del" method="post">
+<input type="hidden" name="postId" value="<%=postId %>">
+<input type="submit" value="글 삭제">
+</form>
 <!-- [ ] 글 수정으로 이동. 글번호를 넘겨야함. -->	
 <a href="${cp }/board/modify?postId=<%=postId %>">글 수정</a>
 <!-- [ ] 글 리스트로 이동. -->	

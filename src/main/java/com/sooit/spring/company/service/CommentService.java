@@ -6,7 +6,7 @@ import com.sooit.spring.company.dto.CommentDto;
 
 public interface CommentService {
 	//게시글에 대한 댓글 목록 조회
-	List<CommentDto> getCommentsByPostId(int postId);
+	List<CommentDto> getCommentsByPostId(long postId);
 	
 	//댓글 추가
 	void addComment(CommentDto comment);
